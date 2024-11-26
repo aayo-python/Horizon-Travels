@@ -1,225 +1,288 @@
-# Amazing-Real-Estate-Web-App
+#Powertrain
+<!-- payoneer -->
+<!-- stripe -->
 
-<a name="readme-top"></a>
+This product is built with Nodejs, Typescript, MongoDb and mongoose.
+It serves data about more than 30000 startups.
 
-<!-- PROJECT LOGO -->
-<br />
+The entire application is contained within the `src` file.
 
+Also, the product files are structured in such a way that: 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+`model` is a folder that contains all the model used for various routes.
 
+`controller` contains all controller files for each routes and calls the service.
 
+`service` is a folder that contains the service files that makes request to the database using the model
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+You can use this product with fetch or axios first by
 
-Think of an online marketplace for housing like airbnb, However Realance is an online marketplace that connects properties to potential buyers. Visitors and buyers can view hundreds of property listings with scrollable property images, videos, perimeter sizes and features before they ever need to schedule a live tour. All property features such as (bath, rooms, location, price, size and more) are displayed for each of the properties. In this React project, we'll be building a large-scale React.js application from scratch. you'll master the basics of Reactjs and proceed to more advanced concepts
+## Install
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+    npm install axios
 
+## Import axios into your document
 
+    import axios from "axios"
 
-### Technologies we'll use
+## Make first request
 
-We'll be building a fullstack project, therefore we'll be using alot of technologies on both the frontend and backend 
+    axios.get
 
-* [![React][React.js]][React-url]
-* ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
-* ![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)
-* ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
-* ![Babel](https://img.shields.io/badge/Babel-F9DC3e?style=for-the-badge&logo=babel&logoColor=black)
+# REQUEST & RESPONSE
 
+However, i used curl- a free open source command line tool
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Get list of Things
 
-### Project Timeline
+### Request
 
-* Project Day 1: Figma to template
+`Create User`
 
-* Project Day 2: State management
+    const response = await axios.get('/user?ID=12345');
 
-* Project Day 3: Form Authentication | Sign In & Sign Up
+### Response
 
-* Project Day 4: Fetching Data from Rapid API
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
 
-* Project Day 5: Performance & Optimization
+    []
 
-* Project Day 6: Testing
+## Create a new user
 
-* Project Day 7: Deployment
+### Request
 
+`POST /User/`
 
+    curl -i -H 'Accept: application/json' -d 'name=Foo&status=new' http://localhost:8080/api/users
 
-<!-- GETTING STARTED -->
-## Getting Started
-Join project on discord: https://discord.gg/gmEQjRdj
+### Response
 
-We'll be using Vite to scaffold our app. Vite is a build tool that aims to provide a faster and leaner development experience for modern web projects.
+    HTTP/1.1 201 Created
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 201 Created
+    Connection: close
+    Content-Type: application/json
+    Location: /thing/1
+    Content-Length: 36
 
-### Prerequisites
+    {"id":1,"name":"Foo","status":"new"}
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm init react@latest
-  ```
+## Get a specific user
 
-### Installation
+### Request
 
-_Below are steps on how to run your first vue development server._
+`GET /thing/id`
 
-1. Start with [vite](https://vitejs.dev/guide/#scaffolding-your-first-vite-project) or
-2. Clone the repo
-   ```sh
-   git clone https://github.com/janto-pee/Music-Streaming-Project"
-   ```
-3. Install all packages
-   ```sh
-   npm install
-   ```
-4. Start `development server`
-   ```sh
-   npm run dev
-   ```
+    curl -i -H 'Accept: application/json' http://localhost:8080/api/users/user-1234567
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Response
 
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 36
 
+    {"id":1,"name":"Foo","status":"new"}
 
-<!-- USAGE EXAMPLES -->
-## Duration
+## Get a non-existent user
 
-This project will commence on the 11th of September and be completed by 21st of same month. All resources will be made accessible to everyone.
+### Request
 
-_For more details, Dont hesitate to contact me [Linkedin](https://linkedin.com/in/adejumo-ayobami-347bb9227)_
+`GET /thing/id`
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-Project link: https://discord.gg/gmEQjRdj
+    curl -i -H 'Accept: application/json' http://localhost:8080/api/users/9999
 
+### Response
 
+    HTTP/1.1 404 Not Found
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 404 Not Found
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 35
 
-<!-- ROADMAP -->
-## Roadmap
+    {"status":404,"reason":"Not found"}
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+## Create another new session
 
-See the [open issues](https://github.com/janto-pee/Music-Streaming-Project/issues) for a full list of proposed features (and known issues).
+### Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+`POST /thing/`
 
+    curl -i -H 'Accept: application/json'  http://localhost:8080/api/session
 
+### Response
 
-<!-- CONTRIBUTING -->
-## Contributing
+    HTTP/1.1 201 Created
+    Date: Thu, 24 Feb 2011 12:36:31 GMT
+    Status: 201 Created
+    Connection: close
+    Content-Type: application/json
+    Location: /thing/2
+    Content-Length: 35
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+    {"id":2,"name":"Bar","status":null}
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+## Get All Registered Users
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+`GET /Users/`
 
+    curl -i -H 'Accept: application/json' http://localhost:8080/api/users
 
+### Response
 
-<!-- LICENSE -->
-## License
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:31 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 74
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+    [{"id":1,"name":"Foo","status":"new"},{"id":2,"name":"Bar","status":null}]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Change a Thing's state
 
+### Request
 
+`PUT /thing/:id/status/changed`
 
-<!-- CONTACT -->
-## Contact
+    curl -i -H 'Accept: application/json' -X PUT http://localhost:8080/api/users/user-114rt/status/changed
 
-Adejumo Ayobami - [Linkedin](https://linkedin.com/in/adejumo-ayobami-347bb9227) - ayobami_adejumo@yahoo.com
+### Response
 
-Project Link: [https://github.com/janto-pee/Music-Streaming-Project](https://github.com/janto-pee/Music-Streaming-Project)
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:31 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 40
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+    {"id":1,"name":"Foo","status":"changed"}
 
+## Get changed Thing
 
+### Request
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+`GET /thing/id`
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
+    curl -i -H 'Accept: application/json' http://localhost:8080/api/users/1
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Response
 
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:31 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 40
 
+    {"id":1,"name":"Foo","status":"changed"}
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/janto-pee/Music-Streaming-Project/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/janto-pee/Music-Streaming-Project/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/janto-pee/Music-Streaming-Project/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/janto-pee/Music-Streaming-Project/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/janto-pee/Music-Streaming-Project/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+## Change a Thing
+
+### Request
+
+`PUT /thing/:id`
+
+    curl -i -H 'Accept: application/json' -X PUT -d 'name=Foo&status=changed2' http://localhost:8080/api/users/1
+
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:31 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 41
+
+    {"id":1,"name":"Foo","status":"changed2"}
+
+
+## Attempt to change a Thing using invalid params
+
+### Request
+
+`PUT /thing/:id`
+
+    curl -i -H 'Accept: application/json' -X PUT -d 'id=99&status=changed4' http://localhost:8080/api/users/1
+
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:32 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 41
+
+    {"id":1,"name":"Foo","status":"changed4"}
+
+
+## Delete a Thing
+
+### Request
+
+`DELETE /thing/id`
+
+    curl -i -H 'Accept: application/json' -X DELETE http://localhost:8080/api/users/user-1xu1/
+
+### Response
+
+    HTTP/1.1 204 No Content
+    Date: Thu, 24 Feb 2011 12:36:32 GMT
+    Status: 204 No Content
+    Connection: close
+
+
+## Try to delete same Thing again
+
+### Request
+
+`DELETE /thing/id`
+
+    curl -i -H 'Accept: application/json' -X DELETE http://localhost:8080/api/users/user-1xu1/
+
+### Response
+
+    HTTP/1.1 404 Not Found
+    Date: Thu, 24 Feb 2011 12:36:32 GMT
+    Status: 404 Not Found
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 35
+
+    {"status":404,"reason":"Not found"}
+
+## Get deleted Thing
+
+### Request
+
+`GET /thing/1`
+
+    curl -i -H 'Accept: application/json' http://localhost:8080/api/users/user-1xu1
+
+### Response
+
+    HTTP/1.1 404 Not Found
+    Date: Thu, 24 Feb 2011 12:36:33 GMT
+    Status: 404 Not Found
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 35
+
+    {"status":404,"reason":"Not found"}
+
+
+
+
+
+
