@@ -1,0 +1,914 @@
+// Request Access Token
+{
+    "token_type": "Bearer",
+    "access_token": "AAIkOWRk...I1HS8rAd",
+    "expires_in": 2592000,
+    "consented_on": 1547831471,
+    "scope": "read write openid personal-details",
+    "refresh_token": "AAKpFgGj...nId26WIJgY",
+    "refresh_token_expires_in": 2592005,
+    "id_token": "eyJhbGciOiJub25l...mV0aWQiOjV9.",
+    "error": null,
+    "error_description": null
+}
+// Requesting an Application
+{
+    "token_type": "Bearer",
+    "access_token": "vQSlvBQK..PuHvYbC",
+    "expires_in": 2592000,
+    "consented_on": 1681240697,
+    "scope": "read write",
+    "refresh_token": null,
+    "refresh_token_expires_in": 0,
+    "id_token": null,
+    "error": null,
+    "error_description": null
+}
+// Refreshing an Access Token
+{
+    "token_type": "Bearer",
+    "access_token": "QqkC4UnxB...YF91g2T",
+    "expires_in": 2592000,
+    "consented_on": 1548782022,
+    "scope": "read write openid",
+    "refresh_token": "AALRkWHo...hh8VP1fz",
+    "refresh_token_expires_in": 2592005
+}
+// Revoking an Access/Application Token
+{
+    "status": "success",
+    "error": null,
+    "error_description": null
+}
+// Revoking a Refresh Token
+{
+    "status": "success",
+    "error": null,
+    "error_description": null
+}
+// Requesting Authorization from a User
+// create payee registration link
+{
+    "payee_id": "test431234",
+    "client_session_id": "sessionid0002",
+    "redirect_url": "https://login.sandbox.payoneer.com/api/v2/oauth2/authorize?client_id=kg5isBlsy...SJWeW&redirect_uri=https://www.example.com&scope=read write openid personal-details&response_type=code&state=state123_{{apuid}}_{{payoneerid}}_{{sessionid}}",
+    "redirect_time": "5",
+    "lock_type": "",
+    "payee_data_matching_type": "",
+    "already_have_an_account": false,
+    "language_id": "1",
+    "payout_methods": [
+        "BankTransfer"
+    ],
+    "payee": {
+        "type": "Individual",
+        "contact": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "PayeeID031821V45ZZZ1@mailinator.com",
+            "date_of_birth": "1999-09-09",
+            "mobile": "4145551235",
+            "mobile_country": "US",
+            "phone": "4145551234",
+            "phone_country": "US"
+        },
+        "id_document": {
+            "type": "SSN",
+            "number": "123456789",
+            "issue_country": "US",
+            "name_on_id": "",
+            "expiration_date": "",
+            "IssueDate": "",
+            "first_name_in_local_language": "",
+            "last_name_in_local_language": ""
+        },
+        "address": {
+            "address_line_1": "1505 Main St.",
+            "address_line_2": "",
+            "city": "Milwaukee",
+            "state": "WI",
+            "country": "US",
+            "zip_code": "53201"
+        },
+        "company": {
+            "name": "",
+            "url": "",
+            "incorporated_country": "",
+            "incorporated_state": "",
+            "incorporated_address_1": "",
+            "incorporated_address_2": "",
+            "incorporated_city": "",
+            "incorporated_zipcode": "",
+            "legal_type": ""
+        }
+    },
+    "payout_method": {
+        "type": "BankTransfer",
+        "bank_account_type": "1",
+        "country": "US",
+        "currency": "USD",
+        "bank_field_details": [
+            {
+                "name": "AccountNumber",
+                "value": "8276019671"
+            },
+            {
+                "name": "AccountName",
+                "value": "John Smith"
+            },
+            {
+                "name": "BankName",
+                "value": "Bank of Hope"
+            },
+            {
+                "name": "RoutingNumber",
+                "value": "122105155"
+            },
+            {
+                "name": "AccountType",
+                "value": "S"
+            }
+        ]
+    }
+}
+// determine required banking fields
+{
+    "result": {
+        "payout_method": {
+            "type": "bank",
+            "country": "AD",
+            "currency": "EUR",
+            "bank_account_type": "Individual",
+            "fields": {
+                "items": [
+                    {
+                        "field_name": "BankName",
+                        "field_id": 1,
+                        "field_type": "Text",
+                        "label": "Bank Name",
+                        "description": "",
+                        "watermark": "e.g. State Bank",
+                        "required": true,
+                        "min_length": 0,
+                        "max_length": 35,
+                        "regex": "^[\\.\\(\\)a-zA-Z0-9 &]+$",
+                        "options_contains_other": false,
+                        "dependent_options_contains_others": false
+                    },
+                    {
+                        "field_name": "AccountName",
+                        "field_id": 2,
+                        "field_type": "Text",
+                        "label": "Account Holder Name",
+                        "description": "Full name of the official bank account holder. Latin characters only, no symbols allowed.",
+                        "watermark": "e.g. John Smith",
+                        "required": true,
+                        "min_length": 0,
+                        "max_length": 70,
+                        "regex": "^[a-zA-Z0-9& ]+$",
+                        "options_contains_other": false,
+                        "dependent_options_contains_others": false
+                    },
+                    {
+                        "field_name": "Swift",
+                        "field_id": 4,
+                        "field_type": "Text",
+                        "label": "BIC",
+                        "description": "<a href=\"http://www.swift.com/bsl/facelets/bicsearch.faces\" target=\"_blank\">Click here</a> to find your SWIFT/BIC",
+                        "watermark": "e.g. ABCDESBBXXX",
+                        "required": true,
+                        "min_length": 8,
+                        "max_length": 11,
+                        "regex": "^([A-Z]{4})([A-Z0-9]{4}|[A-Z0-9]{7})$",
+                        "options_contains_other": false,
+                        "dependent_options_contains_others": false
+                    },
+                    {
+                        "field_name": "IBAN",
+                        "field_id": 7,
+                        "field_type": "Text",
+                        "label": "IBAN",
+                        "description": "<ul><li>IBAN should include 24 characters.</li><li>3rd and 4th characters must be digits.</li></ul>",
+                        "watermark": "e.g. AD12 00012030200359100100",
+                        "required": true,
+                        "min_length": 24,
+                        "max_length": 70,
+                        "regex": "^[A-Z]{2}\\d{2}([ ]?[A-Z0-9]){20}$",
+                        "options_contains_other": false,
+                        "dependent_options_contains_others": false
+                    }
+                ]
+            }
+        }
+    }
+}
+
+
+Get payee status
+
+{
+    "result": {
+        "account_id": "3676945",
+        "status": {
+            "type": 1,
+            "description": "Active"
+        },
+        "registration_date": "2021-05-05",
+        "payout_method": {
+            "type": "BANK"
+        }
+    }
+}
+
+submit mass payout
+{
+    "Payments": [
+        {
+            "client_reference_id": "payment_1",
+            "payee_id": "testa5d2f486",
+            "description": "Test_1256g1",
+            "currency": "USD",
+            "amount": "2.0"
+        },
+        {
+            "client_reference_id": "payment_2",
+            "payee_id": "testa5d2f483",
+            "description": "Test_1258g2",
+            "currency": "USD",
+            "amount": "10.0"
+        }
+    ]
+}
+
+Getpayment status
+{
+    "result": {
+        "payout_date": "2021-03-17T10:47:00-04:00",
+        "amount": 5.1,
+        "currency": "USD",
+        "status": "Transferred",
+        "target_amount": 4.2,
+        "target_currency": "EUR",
+        "payee_id": "Test41234s1324",
+        "payout_id": "1636595702",
+        "scheduled_payout_date": "2021-04-30T00:00:00-04:00",
+        "load_date": "2021-03-17T14:09:39.54-04:00"
+    }
+}
+
+Query program balance
+{
+    "result": {
+        "balance": 9325627.69,
+        "currency": "USD",
+        "fees_due": 65283.48
+    }
+}
+
+Transfer fund
+{
+    "body": {
+        "target_partner_id": "123123123",
+        "amount": "1000",
+        "description": "test transfer"
+    }
+    "result": {
+        "date_time": "2022-02-10T14:59:32.6502065Z",
+        "funding_request_id": 20647,
+        "source_currency": "USD",
+        "source_amount": 1000,
+        "target_currency": "USD",
+        "target_amount": 1000
+    }
+}
+
+Get account balance
+{
+    "result": {
+        "items": [
+            {
+                "id": "4366181865108056",
+                "type": "BALANCE",
+                "currency": "GBP",
+                "status": "2",
+                "status_name": "Active",
+                "available_balance": "20.00",
+                "update_time": "2018-03-30T19:28:17Z"
+            },
+            ".."
+        ],
+        "total": 3
+    }
+}
+
+create recieving account
+
+{
+    "result": {
+        "id": "571494",
+        "currency": "USD",
+        "nickname": "",
+        "status": "1",
+        "status_description": "Enabled",
+        "details": [
+            {
+                "name": "BankName",
+                "value": "Wirecard"
+            },
+            {
+                "name": "BIC",
+                "value": "WIREDEMM"
+            },
+            ".."
+        ]
+    }
+}
+
+Get recieving account
+
+{
+    "result": {
+        "items": [
+            {
+                "id": "1227328",
+                "currency": "USD",
+                "nickname": "",
+                "status": "1",
+                "status_description": "Enabled",
+                "details": {
+                    "items": [
+                        {
+                            "name": "BankName",
+                            "value": "First Century Bank"
+                        },
+                        {
+                            "name": "BankAddress",
+                            "value": "525 Federal Street Bluefield, WV–Bluefield, USA"
+                        },
+                        {
+                            "name": "RoutingABA",
+                            "value": "061120084"
+                        },
+                        {
+                            "name": "AccountNumber",
+                            "value": "4018916222220"
+                        },
+                        {
+                            "name": "AccountType",
+                            "value": "CHECKING"
+                        },
+                        {
+                            "name": "BeneficiaryName",
+                            "value": "Anduin Wrynn"
+                        }
+                    ],
+                    "total": 6
+                }
+            }
+        ],
+        "total": 1
+    }
+}
+
+Get account statements
+{
+    "seller": {
+        "name": "Eli Ron",
+        "address": "150 E 30 street",
+        "country": "CN",
+        "zip": "10000",
+        "email": "elir@payoneer.com",
+        "city": "Beijing"
+    }
+}
+{
+    "result": {
+        "mime_type": "application/pdf",
+        "file_name": "61754371849929_Statement_28032018_175437.pdf",
+        "content": "DAwMDIzOTU0NC………….DAwMDIzOTU0NCAwMDAwMCBuDQowMDAwMjM5ODYzIDAwMDAwIG4NCjAwMDAyNTg5NjkgMDAwMDAgbg0KdHJhaWxlcg0KPDwNCi9Sb290IDEgMCBSDQovSW5mbyAxMSAwIFINCi9TaXplIDMwDQo+Pg0KDQpzdGFydHhyZWYNCjI4Nzc2Ng0KJSVFT0YNCg=="
+    }
+}
+
+Get withdraw eligibility
+{
+    "result": {
+        "status": 2,
+        "status_description": "eligible",
+        "currencies": {
+            "items": [
+                {
+                    "currency": "USD",
+                    "monthly_available": 200000,
+                    "monthly_limit": 200000,
+                    "monthly_used": 0,
+                    "payout_methods": {
+                        "items": [
+                            {
+                                "id": "4366181894204646",
+                                "type": "BALANCE",
+                                "display_name": "USD balance",
+                                "bank_accounts": {
+                                    "items": [
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894204643",
+                                            "display_name": "Bank of America (3333)",
+                                            "currency": "USD",
+                                            "country": "US",
+                                            "min_amount": 300,
+                                            "max_amount": 5109.35
+                                        },
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894204970",
+                                            "display_name": "中国工商银行 (3233)",
+                                            "currency": "CNY",
+                                            "country": "CN",
+                                            "min_amount": 0.1,
+                                            "max_amount": 5109.35
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "currency": "EUR",
+                    "monthly_available": 185050,
+                    "monthly_limit": 185050,
+                    "monthly_used": 0,
+                    "payout_methods": {
+                        "items": [
+                            {
+                                "id": "4366181894204644",
+                                "type": "BALANCE",
+                                "display_name": "EUR balance",
+                                "bank_accounts": {
+                                    "items": [
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894204643",
+                                            "display_name": "Bank of America (3333)",
+                                            "currency": "USD",
+                                            "country": "US",
+                                            "min_amount": 0.01,
+                                            "max_amount": 239.52
+                                        },
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894204970",
+                                            "display_name": "中国工商银行 (3233)",
+                                            "currency": "CNY",
+                                            "country": "CN",
+                                            "min_amount": 0.01,
+                                            "max_amount": 239.52
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "currency": "GBP",
+                    "monthly_available": 162120,
+                    "monthly_limit": 162120,
+                    "monthly_used": 0,
+                    "payout_methods": {
+                        "items": [
+                            {
+                                "id": "4366181894204645",
+                                "type": "BALANCE",
+                                "display_name": "GBP balance",
+                                "bank_accounts": {
+                                    "items": [
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894204643",
+                                            "display_name": "Bank of America (3333)",
+                                            "currency": "USD",
+                                            "country": "US",
+                                            "min_amount": 0.01,
+                                            "max_amount": 0
+                                        },
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894204970",
+                                            "display_name": "中国工商银行 (3233)",
+                                            "currency": "CNY",
+                                            "country": "CN",
+                                            "min_amount": 0.01,
+                                            "max_amount": 0
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
+
+Get eligibility for payment to recipient bank
+{
+    "result": {
+        "status": 2,
+        "status_description": "eligible",
+        "currencies": {
+            "items": [
+                {
+                    "currency": "USD",
+                    "monthly_available": 10000,
+                    "monthly_limit": 10000,
+                    "monthly_used": 0,
+                    "payout_methods": {
+                        "items": [
+                            {
+                                "id": "4366181894204646",
+                                "type": "BALANCE",
+                                "display_name": "USD balance",
+                                "bank_accounts": {
+                                    "items": [
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894205142",
+                                            "display_name": "Bangkok Bank Public Company Limited (2333)",
+                                            "currency": "THB",
+                                            "country": "TH",
+                                            "min_amount": 1000,
+                                            "max_amount": 5109.35
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "currency": "EUR",
+                    "monthly_available": 9252.5,
+                    "monthly_limit": 9252.5,
+                    "monthly_used": 0,
+                    "payout_methods": {
+                        "items": [
+                            {
+                                "id": "4366181894204644",
+                                "type": "BALANCE",
+                                "display_name": "EUR balance",
+                                "bank_accounts": {
+                                    "items": [
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894205142",
+                                            "display_name": "Bangkok Bank Public Company Limited (2333)",
+                                            "currency": "THB",
+                                            "country": "TH",
+                                            "min_amount": 45,
+                                            "max_amount": 239.52
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "currency": "GBP",
+                    "monthly_available": 8106,
+                    "monthly_limit": 8106,
+                    "monthly_used": 0,
+                    "payout_methods": {
+                        "items": [
+                            {
+                                "id": "4366181894204645",
+                                "type": "BALANCE",
+                                "display_name": "GBP balance",
+                                "bank_accounts": {
+                                    "items": [
+                                        {
+                                            "type": "bank_id",
+                                            "id": "4366181894205142",
+                                            "display_name": "Bangkok Bank Public Company Limited (2333)",
+                                            "currency": "THB",
+                                            "country": "TH",
+                                            "min_amount": 35,
+                                            "max_amount": 0
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
+
+Accountholder Initiated Charge (Debit)
+{
+    "client_reference_id": "charge12345",
+    "amount": 2.02,
+    "currency": "USD",
+    "description": "some description of transaction",
+    "to": {
+        "type": "partner",
+        "id": "123123123"
+    }
+}
+{
+    "result": {
+        "type": "debit",
+        "commit_id": "e92708a7-57b6-4b46-a52c-3e94ac60ce49",
+        "client_reference_id": "test23423453",
+        "last_status": "2020-06-05T15:11:04.6903139Z",
+        "created_at": "2020-06-05T15:11:04.6903139Z",
+        "request_details": {
+            "client_reference_id": "test23423453",
+            "amount": 2,
+            "description": "test charge",
+            "currency": "USD",
+            "to": {
+                "id": 100130760,
+                "type": "partner"
+            }
+        },
+        "fees": [
+            {
+                "type": "charge_fee",
+                "amount": 0.04,
+                "currency": "USD"
+            }
+        ],
+        "amounts": {
+            "charged": {
+                "amount": 1.96,
+                "currency": "USD"
+            },
+            "target": {
+                "amount": 1.96,
+                "currency": "USD"
+            }
+        },
+        "expires_at": "2020-06-05T15:16:04.6903139Z"
+    }
+}
+
+Payments to recipient's bank accounts / Payments between Payoneer accounts (Send)
+{
+    "client_reference_id": "send12345",
+    "amount": 12.25,
+    "description": "some description of transaction",
+    "to": {
+        "type": "bank_id",
+        "id": "123123123"
+    }
+}
+{
+    "result": {
+        "commit_id": "eb261a50-171a-4ae8-9325-be933a357d4a",
+        "expires_at": "2019-12-16T20:34:51.3670746Z",
+        "type": "send",
+        "client_reference_id": "map12345",
+        "request_details": {
+            "url": "/accounts/2300907/balances/4366181853096204/payments/send",
+            "body": {
+                "client_reference_id": "test2324235",
+                "amount": 12.25,
+                "target_amount": false,
+                "description": "some description of transaction",
+                "to": {
+                    "type": "bank_id",
+                    "id": "4366181894170415"
+                }
+            }
+        },
+        "from": {
+            "type": "balance",
+            "id": "4366181853096204"
+        },
+        "to": {
+            "type": "bank_id",
+            "id": "4366181894170415"
+        },
+        "fees": [
+            {
+                "type": "transfer_fee",
+                "amount": 1.5,
+                "currency": "USD",
+                "is_estimated": true
+            }
+        ],
+        "amounts": {
+            "charged": {
+                "amount": 12.25,
+                "currency": "USD"
+            },
+            "target": {
+                "amount": 10.75,
+                "currency": "USD",
+                "is_estimated": true
+            }
+        }
+    }
+}
+
+Payments between Payoneer accounts
+
+{
+    "client_reference_id": "test1234",
+    "amount": 50.25,
+    "description": "some description of transaction",
+    "purpose_of_payment": 1,
+    "to": {
+        "type": "email",
+        "id": "testmap01@mailinator.com"
+    }
+}
+
+{
+    "result": {
+        "commit_id": "600a3b52-e666-4a5c-ba93-7795bf0862e3",
+        "expires_at": "2023-03-21T21:28:13.8758878Z",
+        "type": "send",
+        "client_reference_id": "test1234",
+        "request_details": {
+            "url": "/accounts/2968916/balances/4366181893241238/payments/pay_to_payoneer_account",
+            "body": {
+                "client_reference_id": "test1234",
+                "amount": 50.25,
+                "description": "some description of transaction",
+                "purpose_of_payment": 1,
+                "to": {
+                    "type": "email",
+                    "id": "testmap01@mailinator.com"
+                }
+            }
+        },
+        "from": {
+            "type": "balance",
+            "id": "4366181893241238"
+        },
+        "to": {
+            "type": "email",
+            "id": "testmap01@mailinator.com"
+        },
+        "amounts": {
+            "charged": {
+                "amount": 50.25,
+                "currency": "USD"
+            },
+            "target": {
+                "amount": 50.25,
+                "currency": "USD"
+            }
+        }
+    }
+}
+
+Withdraw to user bank account (Withdraw)
+{
+    "client_reference_id": "withdraw12345",
+    "amount": 30,
+    "description": "some description of transaction",
+    "to": {
+        "type": "bank_id",
+        "id": "4366181894204341"
+    }
+}
+
+{
+    "result": {
+        "commit_id": "5a45c76b-687f-46e8-a3f6-1b1d9f6ca406",
+        "expires_at": "2020-01-01T09:44:26.4528872Z",
+        "type": "withdraw",
+        "client_reference_id": "withdraw12345",
+        "request_details": {
+            "url": "/accounts/2982743/balances/4366181893586952/payments/withdraw",
+            "body": {
+                "client_reference_id": "withdraw12345",
+                "amount": 30,
+                "description": "some description of transaction",
+                "target_amount": false,
+                "to": {
+                    "type": "bank_id",
+                    "id": "4366181894204341"
+                }
+            }
+        },
+        "from": {
+            "type": "balance",
+            "id": "4366181893586952"
+        },
+        "to": {
+            "type": "bank_id",
+            "id": "4366181894204341"
+        },
+        "fees": [
+            {
+                "type": "transfer_fee",
+                "amount": 3,
+                "currency": "USD",
+                "is_estimated": true
+            }
+        ],
+        "fx": {
+            "quote": "5315227",
+            "rate": 27.9651851852,
+            "source_currency": "USD",
+            "target_currency": "THB",
+            "is_estimated": true
+        },
+        "amounts": {
+            "charged": {
+                "amount": 30,
+                "currency": "USD"
+            },
+            "target": {
+                "amount": 755.06,
+                "currency": "THB",
+                "is_estimated": true
+            }
+        }
+    }
+}
+
+Get payment status
+{
+    "result": {
+        "status": 2,
+        "status_description": "completed",
+        "payment_id": "4366181902103355"
+    }
+}
+
+commit a pyament
+
+{
+    "result": {
+        "payment_id": "4366181900177340",
+        "status": 2,
+        "status_description": "completed",
+        "last_status": "2022-01-19T15:13:57.4407969Z",
+        "created_at": "2022-01-19T15:13:54.9623312Z",
+        "client_reference_id": "test3243454346",
+        "request_details": {
+            "url": "/accounts/3769570/balances/4366181897867848/payments/debit",
+            "body": {
+                "client_reference_id": "test3243454346",
+                "amount": 16.02,
+                "description": "test USD charge",
+                "currency": "USD",
+                "to": {
+                    "id": 123456,
+                    "type": "partner"
+                }
+            }
+        },
+        "to": {
+            "type": "partner",
+            "id": "123456"
+        },
+        "fees": [
+            {
+                "type": "charge_fee",
+                "amount": 1,
+                "currency": "USD"
+            }
+        ],
+        "amounts": {
+            "charged": {
+                "amount": 16.02,
+                "currency": "USD"
+            },
+            "target": {
+                "amount": 16.02,
+                "currency": "USD"
+            }
+        }
+    }
+}
+
+Get subscriptions
+{
+    "result": {
+        "items": [
+            {
+                "webhook_type": "ACTIVITY_CHANGED",
+                "url": "https://webhook.site/bbbf406d-f50c-455f-b4ed-49cf748a9c30"
+            }
+        ],
+        "total": 1
+    }
+}
+
+Create subscriptions
+{
+    "result": {
+        "webhook_type": "ACTIVITY_CHANGED",
+        "url": "https://webhook.site/bbbf406d-f50c-455f-b4ed-49cf748a9c30"
+    }
+}
