@@ -280,9 +280,3 @@ However, i used curl- a free open source command line tool
     Content-Length: 35
 
     {"status":404,"reason":"Not found"}
-
-
-
-
-
-
