@@ -1,0 +1,97 @@
+-- Hotels
+-- GET - Search Location
+-- GET - Get Hotels Filter
+-- GET - Search Hotels
+-- GET - Search Hotels By Location
+-- GET - Get Hotel Details
+-- Restaurants
+-- GET - Search Restaurant Location
+-- GET - Search Restaurants
+-- GET - Get Restaurant Details V2
+-- GET - Get Restaurant Details (Deprecated)
+-- Vacation Rentals
+-- GET - Search Vacation Rental Location
+-- GET - Rental Search
+-- GET - Rental Details
+-- GET - Rental Availability
+-- GET - Rental Rates
+-- GET - Rental Reviews
+-- Rental Cars
+-- GET - Search Rental Cars Location
+-- GET - Search Cars Same DropOff
+-- GET - Search Cars Different DropOff
+-- Query Params
+-- geoId
+-- *
+-- String
+-- Pass in the geoId of the location retrieved from the Search Location API from the Hotels collection.
+-- checkIn
+-- *
+-- mm/dd/yyyy
+-- Date (yyyy-mm-dd)
+-- Checkin Date Format YYYY-MM-DD
+-- checkOut
+-- *
+-- mm/dd/yyyy
+-- Date (yyyy-mm-dd)
+-- Checkout Date Format YYYY-MM-DD
+-- pageNumber
+-- (optional)
+-- 1
+-- Number
+-- Page number. The default page number is 1.
+-- sort
+-- (optional)
+-- String
+-- adults
+-- (optional)
+-- Number
+-- rooms
+-- (optional)
+-- Number
+-- childrenAges
+-- (optional)
+-- Array
+-- currencyCode
+-- (optional)
+-- USD
+-- String
+-- currencyCode can be retrieved from Get Currency API from Configs collection.
+-- healthSafety
+-- (optional)
+-- Array
+-- deals
+-- (optional)
+-- Array
+-- type
+-- (optional)
+-- Array
+-- amenity
+-- (optional)
+-- Array
+-- neighborhood
+-- (optional)
+-- Array
+-- rating
+-- (optional)
+-- Number
+-- class
+-- (optional)
+-- Array
+-- style
+-- (optional)
+-- Array
+-- brand
+-- (optional)
+-- Array
+-- distFrom
+-- (optional)
+-- String
+-- distFromMaxDistance
+-- (optional)
+-- String
+-- priceMin
+-- (optional)
+-- Number
+-- priceMax
+-- (optional)
