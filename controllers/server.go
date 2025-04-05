@@ -34,9 +34,9 @@ func (server *Server) setUpRouter() {
 	/*
 	*	MUTATIONS
 	 */
-	router.POST("/api/hotels", CreateHotels)
-	router.PUT("/api/hotels/:id", updateHotel)
-	router.DELETE("/api/hotels/:id", deleteHotel)
+	router.POST("/api/hotels", CreateHotel)
+	router.PUT("/api/hotels/:id", UpdateHotel)
+	router.DELETE("/api/hotels/:id", DeleteHotel)
 	router.POST("/movies/aggregations", AggregateHotels)
 
 	server.router = router
