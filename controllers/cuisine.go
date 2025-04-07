@@ -114,7 +114,7 @@ func GetCuisinesByHotel(c *gin.Context) {
 func UpdateCuisine(c *gin.Context) {
 	id := c.Param("id")
 
-	// cuisineID, err := primitive.ObjectIDFromHex(id)
+	cuisineID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
@@ -127,8 +127,8 @@ func UpdateCuisine(c *gin.Context) {
 	}
 
 	// Check if cuisine exists
-	var existingHotel model.Cuisine
-	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", id}}).Decode(&existingCuisine)
+	var existingCuisine model.Cuisine
+	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", cuisineID}}).Decode(&existingCuisine)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cuisine not found"})
 		return
@@ -136,57 +136,36 @@ func UpdateCuisine(c *gin.Context) {
 
 	update := bson.M{
 		"$set": bson.M{
-			"score":      req,
-			"comment":    req.Comment,
+			"origin":     req.Origin,
+			"name":       req.Name,
 			"updated_at": time.Now(),
 		},
 	}
 
-	result, err := util.Db.UpdateByID(context.TODO(), id, update)
+	collection := util.MongoClient.Database(util.DbName).Collection(model.Cuisine{}.CollectionName())
+	result, err := collection.UpdateOne(context.TODO(), bson.M{"_id": cuisineID}, update)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cuisine"})
 		return
 	}
 
-	if result.ModifiedCount == 0 {
-		c.JSON(http.StatusOK, gin.H{"message": "No changes applied"})
+	if result.MatchedCount == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Cuisine not found"})
 		return
 	}
 
-	// Get updated hotel
-	var updatedCuisine model.CupdatedCuisine
-	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", id}}).Decode(&updatedCuisine)
+	// Get the updated cuisine
+	var updatedCuisine model.Cuisine
+	err = collection.FindOne(context.TODO(), bson.M{"_id": cuisineID}).Decode(&updatedCuisine)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated cuisine"})
 		return
 	}
 
-	c.JSON(http.StatusOK, updatedCuisine)
-
-	// collection := util.MongoClient.Database(util.DbName).Collection(model.Cuisine{}.CollectionName())
-	// result, err := collection.UpdateOne(context.TODO(), bson.M{"_id": cuisineID}, update)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cuisine"})
-	// 	return
-	// }
-
-	// if result.MatchedCount == 0 {
-	// 	c.JSON(http.StatusNotFound, gin.H{"error": "Cuisine not found"})
-	// 	return
-	// }
-
-	// // Get the updated cuisine
-	// var updatedCuisine model.Cuisine
-	// err = collection.FindOne(context.TODO(), bson.M{"_id": cuisineID}).Decode(&updatedCuisine)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated cuisine"})
-	// 	return
-	// }
-
-	// c.JSON(http.StatusOK, gin.H{
-	// 	"message": "Cuisine updated successfully",
-	// 	"data":    updatedCuisine,
-	// })
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Cuisine updated successfully",
+		"data":    updatedCuisine,
+	})
 }
 
 // DeleteCuisine deletes a cuisine
