@@ -22,7 +22,7 @@ type PhotoRequest struct {
 	IsPrimary   bool               `json:"is_primary" `
 }
 
-// CreatePhoto handles the creation of a new cuisine
+// CreatePhoto handles the creation of a new photo
 func CreatePhoto(c *gin.Context) {
 	var req PhotoRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -31,7 +31,7 @@ func CreatePhoto(c *gin.Context) {
 	}
 
 	now := time.Now()
-	cuisine := model.Photo{
+	photo := model.Photo{
 		ID:          primitive.NewObjectID(),
 		URL:         req.URL,
 		Title:       req.Title,
@@ -43,47 +43,47 @@ func CreatePhoto(c *gin.Context) {
 		UpdatedAt:   now,
 	}
 
-	// Save the cuisine to the database
-	collection := util.MongoClient.Database(util.DbName).Collection(cuisine.CollectionName())
-	result, err := collection.InsertOne(context.TODO(), cuisine)
+	// Save the photo to the database
+	collection := util.MongoClient.Database(util.DbName).Collection(photo.CollectionName())
+	result, err := collection.InsertOne(context.TODO(), photo)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create cuisine"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create photo"})
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Photo created successfully",
-		"data":    cuisine,
+		"data":    photo,
 		"id":      result.InsertedID,
 	})
 }
 
-// GetPhotoByID retrieves a cuisine by its ID
+// GetPhotoByID retrieves a photo by its ID
 func GetPhotoByID(c *gin.Context) {
 	id := c.Param("id")
 
-	cuisineID, err := primitive.ObjectIDFromHex(id)
+	photoID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
 	}
 
-	var cuisine model.Photo
+	var photo model.Photo
 	collection := util.MongoClient.Database(util.DbName).Collection(model.Photo{}.CollectionName())
-	err = collection.FindOne(context.TODO(), bson.M{"_id": cuisineID}).Decode(&cuisine)
+	err = collection.FindOne(context.TODO(), bson.M{"_id": photoID}).Decode(&photo)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Photo not found"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve cuisine"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve photo"})
 		return
 	}
 
-	c.JSON(http.StatusOK, cuisine)
+	c.JSON(http.StatusOK, photo)
 }
 
-// GetPhotosByHotel retrieves all cuisines for a specific hotel
+// GetPhotosByHotel retrieves all photos for a specific hotel
 func GetPhotosByHotel(c *gin.Context) {
 	hotelID := c.Param("hotelId")
 
@@ -93,29 +93,29 @@ func GetPhotosByHotel(c *gin.Context) {
 		return
 	}
 
-	var cuisines []model.Photo
+	var photos []model.Photo
 	collection := util.MongoClient.Database(util.DbName).Collection(model.Photo{}.CollectionName())
 
 	cursor, err := collection.Find(context.TODO(), bson.M{"hotel_id": objectID})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve cuisines"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve photos"})
 		return
 	}
 	defer cursor.Close(context.TODO())
 
-	if err = cursor.All(context.TODO(), &cuisines); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode cuisines"})
+	if err = cursor.All(context.TODO(), &photos); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode photos"})
 		return
 	}
 
-	c.JSON(http.StatusOK, cuisines)
+	c.JSON(http.StatusOK, photos)
 }
 
-// UpdatePhoto updates an existing cuisine
+// UpdatePhoto updates an existing photo
 func UpdatePhoto(c *gin.Context) {
 	id := c.Param("id")
 
-	cuisineID, err := primitive.ObjectIDFromHex(id)
+	photoID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
@@ -127,9 +127,9 @@ func UpdatePhoto(c *gin.Context) {
 		return
 	}
 
-	// Check if cuisine exists
+	// Check if photo exists
 	var existingPhoto model.Photo
-	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", cuisineID}}).Decode(&existingPhoto)
+	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", photoID}}).Decode(&existingPhoto)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Photo not found"})
 		return
@@ -144,9 +144,9 @@ func UpdatePhoto(c *gin.Context) {
 	}
 
 	collection := util.MongoClient.Database(util.DbName).Collection(model.Photo{}.CollectionName())
-	result, err := collection.UpdateOne(context.TODO(), bson.M{"_id": cuisineID}, update)
+	result, err := collection.UpdateOne(context.TODO(), bson.M{"_id": photoID}, update)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cuisine"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update photo"})
 		return
 	}
 
@@ -155,11 +155,11 @@ func UpdatePhoto(c *gin.Context) {
 		return
 	}
 
-	// Get the updated cuisine
+	// Get the updated photo
 	var updatedPhoto model.Photo
-	err = collection.FindOne(context.TODO(), bson.M{"_id": cuisineID}).Decode(&updatedPhoto)
+	err = collection.FindOne(context.TODO(), bson.M{"_id": photoID}).Decode(&updatedPhoto)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated cuisine"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated photo"})
 		return
 	}
 
@@ -169,20 +169,20 @@ func UpdatePhoto(c *gin.Context) {
 	})
 }
 
-// DeletePhoto deletes a cuisine
+// DeletePhoto deletes a photo
 func DeletePhoto(c *gin.Context) {
 	id := c.Param("id")
 
-	cuisineID, err := primitive.ObjectIDFromHex(id)
+	photoID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
 	}
 
 	collection := util.MongoClient.Database(util.DbName).Collection(model.Photo{}.CollectionName())
-	result, err := collection.DeleteOne(context.TODO(), bson.M{"_id": cuisineID})
+	result, err := collection.DeleteOne(context.TODO(), bson.M{"_id": photoID})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete cuisine"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete photo"})
 		return
 	}
 
@@ -194,7 +194,7 @@ func DeletePhoto(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Photo deleted successfully"})
 }
 
-// GetAveragePhotoForHotel calculates the average cuisine for a hotel
+// GetAveragePhotoForHotel calculates the average photo for a hotel
 func GetAveragePhotoForHotel(c *gin.Context) {
 	hotelID := c.Param("hotelId")
 
@@ -218,7 +218,7 @@ func GetAveragePhotoForHotel(c *gin.Context) {
 
 	cursor, err := collection.Aggregate(context.TODO(), pipeline)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to calculate average cuisine"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to calculate average photo"})
 		return
 	}
 	defer cursor.Close(context.TODO())
