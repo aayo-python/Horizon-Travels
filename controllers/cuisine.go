@@ -14,12 +14,13 @@ import (
 )
 
 // CuisineRequest represents the structure for a cuisine request
+// CreatedAt   time.Time          `json:"created_at" binding:"required"`
+// UpdatedAt   time.Time          `json:"updated_at" binding:"required"`
 type CuisineRequest struct {
-	UserID  string  `json:"user_id" binding:"required"`
-	HotelID string  `json:"hotel_id" binding:"required"`
-	Name    string  `json:"name" binding:"required"`
-	Score   float64 `json:"score" binding:"required,min=1,max=5"`
-	Comment string  `json:"comment"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Origin      string `json:"origin" binding:"required"`
+	Category    string `json:"category" binding:"required"`
 }
 
 // CreateCuisine handles the creation of a new cuisine
@@ -30,25 +31,12 @@ func CreateCuisine(c *gin.Context) {
 		return
 	}
 
-	// Convert string IDs to ObjectIDs
-	userID, err := primitive.ObjectIDFromHex(req.UserID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
-		return
-	}
-
-	hotelID, err := primitive.ObjectIDFromHex(req.HotelID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID format"})
-		return
-	}
-
 	now := time.Now()
 	cuisine := model.Cuisine{
 		ID:          primitive.NewObjectID(),
 		Name:        req.Name,
 		Description: req.Description,
-		Origin:      userID,
+		Origin:      req.Origin,
 		Category:    req.Category,
 		CreatedAt:   now,
 		UpdatedAt:   now,
@@ -126,7 +114,7 @@ func GetCuisinesByHotel(c *gin.Context) {
 func UpdateCuisine(c *gin.Context) {
 	id := c.Param("id")
 
-	cuisineID, err := primitive.ObjectIDFromHex(id)
+	// cuisineID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
@@ -138,38 +126,67 @@ func UpdateCuisine(c *gin.Context) {
 		return
 	}
 
+	// Check if cuisine exists
+	var existingHotel model.Cuisine
+	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", id}}).Decode(&existingCuisine)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Cuisine not found"})
+		return
+	}
+
 	update := bson.M{
 		"$set": bson.M{
-			"score":      req.Score,
+			"score":      req,
 			"comment":    req.Comment,
 			"updated_at": time.Now(),
 		},
 	}
 
-	collection := util.MongoClient.Database(util.DbName).Collection(model.Cuisine{}.CollectionName())
-	result, err := collection.UpdateOne(context.TODO(), bson.M{"_id": cuisineID}, update)
+	result, err := util.Db.UpdateByID(context.TODO(), id, update)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cuisine"})
+		c.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	if result.MatchedCount == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Cuisine not found"})
+	if result.ModifiedCount == 0 {
+		c.JSON(http.StatusOK, gin.H{"message": "No changes applied"})
 		return
 	}
 
-	// Get the updated cuisine
-	var updatedCuisine model.Cuisine
-	err = collection.FindOne(context.TODO(), bson.M{"_id": cuisineID}).Decode(&updatedCuisine)
+	// Get updated hotel
+	var updatedCuisine model.CupdatedCuisine
+	err = util.Db.FindOne(context.TODO(), bson.D{{"_id", id}}).Decode(&updatedCuisine)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated cuisine"})
+		c.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Cuisine updated successfully",
-		"data":    updatedCuisine,
-	})
+	c.JSON(http.StatusOK, updatedCuisine)
+
+	// collection := util.MongoClient.Database(util.DbName).Collection(model.Cuisine{}.CollectionName())
+	// result, err := collection.UpdateOne(context.TODO(), bson.M{"_id": cuisineID}, update)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cuisine"})
+	// 	return
+	// }
+
+	// if result.MatchedCount == 0 {
+	// 	c.JSON(http.StatusNotFound, gin.H{"error": "Cuisine not found"})
+	// 	return
+	// }
+
+	// // Get the updated cuisine
+	// var updatedCuisine model.Cuisine
+	// err = collection.FindOne(context.TODO(), bson.M{"_id": cuisineID}).Decode(&updatedCuisine)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve updated cuisine"})
+	// 	return
+	// }
+
+	// c.JSON(http.StatusOK, gin.H{
+	// 	"message": "Cuisine updated successfully",
+	// 	"data":    updatedCuisine,
+	// })
 }
 
 // DeleteCuisine deletes a cuisine

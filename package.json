@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@nestjs/sequelize": "^11.0.0"
+  }
+}
